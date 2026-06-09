@@ -24,8 +24,10 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    public User(Long id, String name, String email, String password, Role role) {
-        this.id = id;
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Employee employee;
+
+    public User(String name, String email, String password, Role role) {
         this.name = name;
         this.email = email;
         this.password = password;
