@@ -3,6 +3,8 @@ package com.example.byggforetag.Model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "employee")
@@ -16,6 +18,9 @@ public class Employee {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @OneToMany(mappedBy = "employee", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<JobAssignment> jobAssignments = new ArrayList<>();
+
     @Column(name = "hire_date", nullable = false)
     private LocalDate hireDate;
 
@@ -24,8 +29,9 @@ public class Employee {
 
     public Employee(){}
 
-    public Employee(User user, LocalDate hireDate) {
+    public Employee(User user, List<JobAssignment> jobAssignments, LocalDate hireDate) {
         this.user = user;
+        this.jobAssignments = jobAssignments;
         this.hireDate = hireDate;
         this.vacationDays = 25;
     }
@@ -34,8 +40,12 @@ public class Employee {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public List<JobAssignment> getJobAssignments() {
+        return jobAssignments;
+    }
+
+    public void setJobAssignments(List<JobAssignment> jobAssignments) {
+        this.jobAssignments = jobAssignments;
     }
 
     public User getUser() {
