@@ -3,6 +3,8 @@ package com.example.byggforetag.Model;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "service_type")
@@ -20,6 +22,9 @@ public class ServiceType {
 
     @Column(name = "description", nullable = false)
     private String description;
+
+    @OneToMany(mappedBy = "serviceType", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<JobItem> jobItems = new ArrayList<>();
 
     public ServiceType(){}
 
