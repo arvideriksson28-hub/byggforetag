@@ -18,6 +18,9 @@ public class Job {
     @OneToMany(mappedBy = "job", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<JobItem> jobItems = new ArrayList<>();
 
+    @OneToMany(mappedBy = "job", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<JobAssignment> jobAssignments = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private User user;
@@ -34,7 +37,9 @@ public class Job {
 
     public Job(){}
 
-    public Job(User user, JobStatus jobStatus, Address address, LocalDate scheduledDate) {
+    public Job(List<JobItem> jobItems, List<JobAssignment> jobAssignments, User user, JobStatus jobStatus, Address address, LocalDate scheduledDate) {
+        this.jobItems = jobItems;
+        this.jobAssignments = jobAssignments;
         this.user = user;
         this.jobStatus = jobStatus;
         this.address = address;
@@ -43,6 +48,30 @@ public class Job {
 
     public Long getId() {
         return id;
+    }
+
+    public List<JobItem> getJobItems() {
+        return jobItems;
+    }
+
+    public void setJobItems(List<JobItem> jobItems) {
+        this.jobItems = jobItems;
+    }
+
+    public List<JobAssignment> getJobAssignments() {
+        return jobAssignments;
+    }
+
+    public void setJobAssignments(List<JobAssignment> jobAssignments) {
+        this.jobAssignments = jobAssignments;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public User getUser() {
