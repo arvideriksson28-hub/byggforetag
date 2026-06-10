@@ -17,6 +17,9 @@ public class JobItem {
     @JoinColumn(name = "service_type_id")
     private ServiceType serviceType;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_id")
+    private Job job;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
@@ -26,14 +29,23 @@ public class JobItem {
 
     public JobItem(){}
 
-    public JobItem(ServiceType serviceType, Integer quantity, BigDecimal unitPrice) {
+    public JobItem(ServiceType serviceType, Job job, Integer quantity, BigDecimal unitPrice) {
         this.serviceType = serviceType;
+        this.job = job;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
     }
 
     public ServiceType getServiceType() {

@@ -3,6 +3,9 @@ package com.example.byggforetag.Model;
 import com.example.byggforetag.Enums.Role;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -26,6 +29,9 @@ public class User {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Employee employee;
+
+    @OneToMany(mappedBy = "user")
+    private List<Job> jobs = new ArrayList<>();
 
     public User(String name, String email, String password, Role role) {
         this.name = name;

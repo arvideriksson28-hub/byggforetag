@@ -1,0 +1,79 @@
+package com.example.byggforetag.Model;
+
+import com.example.byggforetag.Enums.JobStatus;
+import com.example.byggforetag.embeddable.Address;
+import jakarta.persistence.*;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "job")
+public class Job {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToMany(mappedBy = "job", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<JobItem> jobItems = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private JobStatus jobStatus;
+
+    @Embedded
+    private Address address;
+
+    @Column(name = "scheduled_date", nullable = false)
+    private LocalDate scheduledDate;
+
+    public Job(){}
+
+    public Job(User user, JobStatus jobStatus, Address address, LocalDate scheduledDate) {
+        this.user = user;
+        this.jobStatus = jobStatus;
+        this.address = address;
+        this.scheduledDate = scheduledDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public JobStatus getJobStatus() {
+        return jobStatus;
+    }
+
+    public void setJobStatus(JobStatus jobStatus) {
+        this.jobStatus = jobStatus;
+    }
+
+    public Address getAdress() {
+        return address;
+    }
+
+    public void setAdress(Address address) {
+        this.address = address;
+    }
+
+    public LocalDate getScheduledDate() {
+        return scheduledDate;
+    }
+
+    public void setScheduledDate(LocalDate scheduledDate) {
+        this.scheduledDate = scheduledDate;
+    }
+}
