@@ -31,6 +31,9 @@ public class User {
     private Employee employee;
 
     @OneToMany(mappedBy = "user")
+    private List<Message> messages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
     private List<Job> jobs = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
@@ -73,6 +76,22 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 
     public String getEmail() {
