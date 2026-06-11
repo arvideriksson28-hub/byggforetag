@@ -27,6 +27,9 @@ public class Employee {
     @Column(name = "vacation_days")
     private Integer vacationDays;
 
+    @OneToMany(mappedBy = "employee", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<LeaveRequest> leaveRequests = new ArrayList<>();
+
     public Employee(){}
 
     public Employee(User user, List<JobAssignment> jobAssignments, LocalDate hireDate) {
@@ -38,6 +41,14 @@ public class Employee {
 
     public Long getId() {
         return id;
+    }
+
+    public List<LeaveRequest> getLeaveRequests() {
+        return leaveRequests;
+    }
+
+    public void setLeaveRequests(List<LeaveRequest> leaveRequests) {
+        this.leaveRequests = leaveRequests;
     }
 
     public List<JobAssignment> getJobAssignments() {
