@@ -27,7 +27,7 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user")
     private Employee employee;
 
     @OneToMany(mappedBy = "user")
