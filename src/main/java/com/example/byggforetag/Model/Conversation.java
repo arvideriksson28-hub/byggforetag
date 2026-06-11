@@ -23,6 +23,10 @@ public class Conversation {
     @OneToMany(mappedBy = "conversation")
     private List<Message> messages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "conversation")
+    private List<ConversationParticipant> conversationParticipants = new ArrayList<>();
+
+
     public Conversation(){}
 
     public Conversation(Job job, String title) {
@@ -32,6 +36,14 @@ public class Conversation {
 
     public Long getId() {
         return id;
+    }
+
+    public List<ConversationParticipant> getConversationParticipants() {
+        return conversationParticipants;
+    }
+
+    public void setConversationParticipants(List<ConversationParticipant> conversationParticipants) {
+        this.conversationParticipants = conversationParticipants;
     }
 
     public List<Message> getMessages() {
