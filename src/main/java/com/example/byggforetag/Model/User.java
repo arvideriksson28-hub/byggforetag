@@ -27,11 +27,14 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user")
     private Employee employee;
 
     @OneToMany(mappedBy = "user")
     private List<Job> jobs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<ConversationParticipant> conversationParticipants = new ArrayList<>();
 
     public User(String name, String email, String password, Role role) {
         this.name = name;
@@ -46,9 +49,23 @@ public class User {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public List<Job> getJobs() {
+        return jobs;
     }
+
+
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
+    }
+
+    public List<ConversationParticipant> getConversationParticipants() {
+        return conversationParticipants;
+    }
+
+    public void setConversationParticipants(List<ConversationParticipant> conversationParticipants) {
+        this.conversationParticipants = conversationParticipants;
+    }
+
 
     public String getName() {
         return name;

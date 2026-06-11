@@ -35,11 +35,14 @@ public class Job {
     @Column(name = "scheduled_date", nullable = false)
     private LocalDate scheduledDate;
 
-    @OneToOne(mappedBy = "job", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "job")
     private Quote quote;
 
     @OneToMany(mappedBy = "job", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<TimeReport> timeReports = new ArrayList<>();
+
+    @OneToOne(mappedBy = "job")
+    private Conversation conversation;
 
     public Job(){}
 
@@ -54,6 +57,22 @@ public class Job {
 
     public Long getId() {
         return id;
+    }
+
+    public void setQuote(Quote quote) {
+        this.quote = quote;
+    }
+
+    public void setTimeReports(List<TimeReport> timeReports) {
+        this.timeReports = timeReports;
+    }
+
+    public Conversation getConversation() {
+        return conversation;
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
     }
 
     public Quote getQuote() {
