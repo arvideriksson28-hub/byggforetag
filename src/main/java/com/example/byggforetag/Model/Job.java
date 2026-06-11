@@ -35,6 +35,9 @@ public class Job {
     @Column(name = "scheduled_date", nullable = false)
     private LocalDate scheduledDate;
 
+    @OneToOne(mappedBy = "job", fetch = FetchType.LAZY)
+    private Quote quote;
+
     public Job(){}
 
     public Job(List<JobItem> jobItems, List<JobAssignment> jobAssignments, User user, JobStatus jobStatus, Address address, LocalDate scheduledDate) {
