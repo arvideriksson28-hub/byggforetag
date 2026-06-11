@@ -30,6 +30,9 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<LeaveRequest> leaveRequests = new ArrayList<>();
 
+    @OneToMany(mappedBy = "employee", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<TimeReport> timeReports = new ArrayList<>();
+
     public Employee(){}
 
     public Employee(User user, List<JobAssignment> jobAssignments, LocalDate hireDate) {
@@ -41,6 +44,10 @@ public class Employee {
 
     public Long getId() {
         return id;
+    }
+
+    public List<TimeReport> getTimeReports() {
+        return timeReports;
     }
 
     public List<LeaveRequest> getLeaveRequests() {
