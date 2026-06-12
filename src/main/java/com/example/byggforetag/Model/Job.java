@@ -134,14 +134,6 @@ public class Job {
         this.jobStatus = jobStatus;
     }
 
-    public Address getAdress() {
-        return address;
-    }
-
-    public void setAdress(Address address) {
-        this.address = address;
-    }
-
     public LocalDate getScheduledDate() {
         return scheduledDate;
     }

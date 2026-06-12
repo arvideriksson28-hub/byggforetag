@@ -34,7 +34,7 @@ public class User {
     private List<Message> messages = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Job> jobs = new ArrayList<>();
+    private List<Job> bookedJobs = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<ConversationParticipant> conversationParticipants = new ArrayList<>();
@@ -74,13 +74,12 @@ public class User {
         this.notifications = notifications;
     }
 
-    public List<Job> getJobs() {
-        return jobs;
+    public List<Job> getBookedJobs() {
+        return bookedJobs;
     }
 
-
-    public void setJobs(List<Job> jobs) {
-        this.jobs = jobs;
+    public void setBookedJobs(List<Job> bookedJobs) {
+        this.bookedJobs = bookedJobs;
     }
 
     public List<ConversationParticipant> getConversationParticipants() {
