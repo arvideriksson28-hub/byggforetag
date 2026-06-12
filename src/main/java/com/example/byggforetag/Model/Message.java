@@ -32,6 +32,14 @@ public class Message {
         return id;
     }
 
+    public Conversation getConversation() {
+        return conversation;
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
+    }
+
     public User getUser() {
         return user;
     }

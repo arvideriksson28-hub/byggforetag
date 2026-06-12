@@ -46,6 +46,14 @@ public class ServiceType {
         this.name = name;
     }
 
+    public List<JobItem> getJobItems() {
+        return jobItems;
+    }
+
+    public void setJobItems(List<JobItem> jobItems) {
+        this.jobItems = jobItems;
+    }
+
     public BigDecimal getBasePrice() {
         return basePrice;
     }

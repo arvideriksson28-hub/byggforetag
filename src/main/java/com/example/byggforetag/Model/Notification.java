@@ -32,7 +32,7 @@ public class Notification {
 
     public Notification(){}
 
-    public Notification(User user, String message, NotificationType notificationType, boolean read, LocalDateTime createdAt) {
+    public Notification(User user, String message, NotificationType notificationType, LocalDateTime createdAt) {
         this.user = user;
         this.message = message;
         this.notificationType = notificationType;
