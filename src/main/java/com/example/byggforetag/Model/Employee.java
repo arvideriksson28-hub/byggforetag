@@ -33,6 +33,9 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<TimeReport> timeReports = new ArrayList<>();
 
+    @OneToMany(mappedBy = "employee")
+    private List<Certification> certifications = new ArrayList<>();
+
     public Employee(){}
 
     public Employee(User user, List<JobAssignment> jobAssignments, LocalDate hireDate) {
@@ -44,6 +47,10 @@ public class Employee {
 
     public Long getId() {
         return id;
+    }
+
+    public List<Certification> getCertifications() {
+        return certifications;
     }
 
     public List<TimeReport> getTimeReports() {
