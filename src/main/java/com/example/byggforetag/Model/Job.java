@@ -44,6 +44,9 @@ public class Job {
     @OneToOne(mappedBy = "job")
     private Conversation conversation;
 
+    @OneToOne(mappedBy = "job")
+    private Review review;
+
     public Job(){}
 
     public Job(List<JobItem> jobItems, List<JobAssignment> jobAssignments, User user, JobStatus jobStatus, Address address, LocalDate scheduledDate) {
@@ -57,6 +60,14 @@ public class Job {
 
     public Long getId() {
         return id;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
     }
 
     public void setQuote(Quote quote) {
