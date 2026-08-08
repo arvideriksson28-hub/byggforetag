@@ -2,6 +2,7 @@ package com.example.byggforetag.Service;
 
 import com.example.byggforetag.DTO.UserDto;
 import com.example.byggforetag.Enums.Role;
+import com.example.byggforetag.Exception.EmailAlreadyExistsException;
 import com.example.byggforetag.Model.User;
 import com.example.byggforetag.Repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class UserService {
 
     public UserDto registerUser(UserDto userDto){
         if (userRepository.existsByEmail(userDto.getEmail())) {
-            throw new RuntimeException("Email redan registrerad");
+            throw new EmailAlreadyExistsException(userDto.getEmail());
         }
 
         User user = userDto.toEntity(Role.ROLE_USER);
@@ -43,7 +44,7 @@ public class UserService {
 
     public UserDto registerEmployee(UserDto userDto){
         if (userRepository.existsByEmail(userDto.getEmail())){
-            throw new RuntimeException("Email redan registrerad");
+            throw new EmailAlreadyExistsException(userDto.getEmail());
         }
 
         User user = userDto.toEntity(Role.ROLE_EMPLOYEE);
