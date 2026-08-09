@@ -3,6 +3,7 @@ package com.example.byggforetag.Service;
 import com.example.byggforetag.DTO.UserDto;
 import com.example.byggforetag.Enums.Role;
 import com.example.byggforetag.Exception.EmailAlreadyExistsException;
+import com.example.byggforetag.Exception.UserNotFoundException;
 import com.example.byggforetag.Model.User;
 import com.example.byggforetag.Repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,8 @@ public class UserService {
     }
 
     public Optional<User> findByEmail(String email){
-
-        Optional<User> users = userRepository.findByEmail(email);
-        return users;
+        Optional<User> user = userRepository.findByEmail(email);
+        return user;
     }
 
     public boolean existsByEmail(String email){
@@ -49,5 +49,38 @@ public class UserService {
 
         User user = userDto.toEntity(Role.ROLE_EMPLOYEE);
         return UserDto.fromEntity(userRepository.save(user));
+    }
+
+    public UserDto getUserById(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+       return UserDto.fromEntity(user);
+    }
+
+    public List<UserDto> getallUsers(){
+      List<User> users = userRepository.findAll();
+      return users.stream()
+              .map(UserDto::fromEntity)
+              .toList();
+    }
+    public UserDto updateUser(Long id,UserDto userDto){
+       User user = userRepository.findById(id)
+               .orElseThrow(() -> new UserNotFoundException(id));
+       if (userDto.getEmail() != null){
+           user.setEmail(userDto.getEmail());
+       }
+       if (userDto.getName() != null){
+           user.setName(userDto.getName());
+       }
+       if (userDto.getPassword() != null){
+           user.setPassword(userDto.getPassword());
+       }
+       return UserDto.fromEntity(userRepository.save(user));
+    }
+
+    public void deleteUser(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new UserNotFoundException(id));
+        userRepository.delete(user);
     }
 }
