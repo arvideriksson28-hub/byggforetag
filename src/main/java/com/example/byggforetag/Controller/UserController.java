@@ -1,9 +1,9 @@
 package com.example.byggforetag.Controller;
 
 import com.example.byggforetag.DTO.UserDto;
-import com.example.byggforetag.Model.User;
+
 import com.example.byggforetag.Service.UserService;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
