@@ -4,10 +4,14 @@ import com.example.byggforetag.DTO.UserDto;
 import com.example.byggforetag.Enums.Role;
 import com.example.byggforetag.Exception.EmailAlreadyExistsException;
 import com.example.byggforetag.Exception.UserNotFoundException;
+import com.example.byggforetag.Model.Employee;
 import com.example.byggforetag.Model.User;
+import com.example.byggforetag.Repository.EmployeeRepository;
 import com.example.byggforetag.Repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +19,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final EmployeeRepository employeeRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository) {
         this.userRepository = userRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     public Optional<User> findByEmail(String email){
@@ -48,7 +54,12 @@ public class UserService {
         }
 
         User user = userDto.toEntity(Role.ROLE_EMPLOYEE);
-        return UserDto.fromEntity(userRepository.save(user));
+        userRepository.save(user);
+
+        Employee employee = new Employee(user, new ArrayList<>(), LocalDate.now());
+        employeeRepository.save(employee);
+
+        return UserDto.fromEntity(user);
     }
 
     public UserDto getUserById(Long id){
