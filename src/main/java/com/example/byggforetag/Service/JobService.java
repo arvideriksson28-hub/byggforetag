@@ -37,13 +37,13 @@ public class JobService {
          Job job = new Job(new ArrayList<>(), new ArrayList<>(), user, JobStatus.RECEIVED, jobDto.getAddress(), jobDto.getScheduledDate());
          jobRepository.save(job);
 
-         List<JobItem> jobItems = jobDto.getJobItem().stream()
+         List<JobItem> jobItems = new ArrayList<>(jobDto.getJobItem().stream()
                  .map(jobItemDto -> {
                      ServiceType serviceType = serviceTypeRepository.findById(jobItemDto.getServiceTypeId())
                              .orElseThrow(() -> new RuntimeException("ServiceType hittades inte"));
                      return jobItemDto.toEntity(serviceType, job);
                  })
-                 .toList();
+                 .toList());
          job.setJobItems(jobItems);
 
          return JobDto.fromEntity(jobRepository.save(job));
