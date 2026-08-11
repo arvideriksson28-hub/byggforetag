@@ -77,4 +77,20 @@ public class JobService {
                 .map(JobDto::fromEntity)
                 .toList();
     }
+
+    public List<JobDto> getAllJobs(){
+        List<Job> jobs = jobRepository.findAll();
+        return jobs.stream()
+                .map(JobDto::fromEntity)
+                .toList();
+    }
+
+    public JobDto updateJobStatus(Long id, JobStatus jobStatus){
+        Job job = jobRepository.findById(id)
+                .orElseThrow(() -> new JobNotFoundException(id));
+        job.setJobStatus(jobStatus);
+        return JobDto.fromEntity(jobRepository.save(job));
+    }
+
+
 }
