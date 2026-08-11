@@ -1,8 +1,10 @@
 package com.example.byggforetag.Controller;
 
+import com.example.byggforetag.DTO.EmployeeDto;
 import com.example.byggforetag.DTO.JobDto;
 import com.example.byggforetag.DTO.UserDto;
 import com.example.byggforetag.Enums.JobStatus;
+import com.example.byggforetag.Service.EmployeeService;
 import com.example.byggforetag.Service.JobService;
 import com.example.byggforetag.Service.UserService;
 import org.springframework.http.HttpStatus;
@@ -16,10 +18,12 @@ import java.util.List;
 public class AdminController {
     private final UserService userService;
     private final JobService jobService;
+    private final EmployeeService employeeService;
 
-    public AdminController(UserService userService, JobService jobService) {
+    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService) {
         this.userService = userService;
         this.jobService = jobService;
+        this.employeeService = employeeService;
     }
 
     @PostMapping("/register/employee")
@@ -57,5 +61,20 @@ public class AdminController {
     public ResponseEntity<Void> deleteJob(@PathVariable Long id){
         jobService.deleteJob(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/employees")
+    public ResponseEntity<List<EmployeeDto>> getAllEmployees(){
+        return ResponseEntity.ok(employeeService.getAllEmployees());
+    }
+
+    @GetMapping("/employees/{id}")
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long id){
+        return ResponseEntity.ok(employeeService.getEmployeeById(id));
+    }
+
+    @PutMapping("/employees/{id}")
+    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDto employeeDto){
+        return ResponseEntity.ok(employeeService.updateEmployee(employeeDto, id));
     }
 }
