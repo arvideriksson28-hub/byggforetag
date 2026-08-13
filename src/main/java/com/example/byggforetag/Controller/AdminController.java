@@ -1,14 +1,9 @@
 package com.example.byggforetag.Controller;
 
-import com.example.byggforetag.DTO.EmployeeDto;
-import com.example.byggforetag.DTO.JobAssignmentDto;
-import com.example.byggforetag.DTO.JobDto;
-import com.example.byggforetag.DTO.UserDto;
+import com.example.byggforetag.DTO.*;
 import com.example.byggforetag.Enums.JobStatus;
-import com.example.byggforetag.Service.EmployeeService;
-import com.example.byggforetag.Service.JobAssignmentService;
-import com.example.byggforetag.Service.JobService;
-import com.example.byggforetag.Service.UserService;
+import com.example.byggforetag.Enums.LeaveStatus;
+import com.example.byggforetag.Service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +17,14 @@ public class AdminController {
     private final JobService jobService;
     private final EmployeeService employeeService;
     private final JobAssignmentService jobAssignmentService;
+    private final LeaveRequestService leaveRequestService;
 
-    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService) {
+    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService, LeaveRequestService leaveRequestService) {
         this.userService = userService;
         this.jobService = jobService;
         this.employeeService = employeeService;
         this.jobAssignmentService = jobAssignmentService;
+        this.leaveRequestService = leaveRequestService;
     }
 
     @PostMapping("/register/employee")
@@ -96,5 +93,15 @@ public class AdminController {
     @GetMapping("/jobassignments/{id}")
     public ResponseEntity<List<JobAssignmentDto>> getAllJobAssignments(@PathVariable Long id){
         return ResponseEntity.ok(jobAssignmentService.getJobAssignmentByJobId(id));
+    }
+
+    @GetMapping("/leaverequests")
+    public ResponseEntity<List<LeaveRequestDto>> getAllLeaveRequests(){
+        return ResponseEntity.ok(leaveRequestService.getAllLeaveRequests());
+    }
+
+    @PutMapping("/leaverequests/{id}/status")
+    public ResponseEntity<LeaveRequestDto> answerLeaveRequest(@PathVariable Long id, @RequestBody LeaveStatus leaveStatus){
+        return ResponseEntity.ok(leaveRequestService.updateLeaveStatus(id, leaveStatus));
     }
 }
