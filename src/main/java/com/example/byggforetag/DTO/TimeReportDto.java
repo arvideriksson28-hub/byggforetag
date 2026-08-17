@@ -23,7 +23,7 @@ public class TimeReportDto {
         this.minutes = minutes;
     }
 
-    public TimeReportDto fromEntity(TimeReport timeReport){
+    public static TimeReportDto fromEntity(TimeReport timeReport){
         return new TimeReportDto(
                 timeReport.getJob().getId(),
                 timeReport.getStartTime(),
