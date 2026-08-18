@@ -19,14 +19,16 @@ public class AdminController {
     private final JobAssignmentService jobAssignmentService;
     private final LeaveRequestService leaveRequestService;
     private final TimeReportService timeReportService;
+    private final QuoteService quoteService;
 
-    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService, LeaveRequestService leaveRequestService, TimeReportService timeReportService) {
+    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService, LeaveRequestService leaveRequestService, TimeReportService timeReportService, QuoteService quoteService) {
         this.userService = userService;
         this.jobService = jobService;
         this.employeeService = employeeService;
         this.jobAssignmentService = jobAssignmentService;
         this.leaveRequestService = leaveRequestService;
         this.timeReportService = timeReportService;
+        this.quoteService = quoteService;
 
     }
 
@@ -116,6 +118,27 @@ public class AdminController {
     @GetMapping("/timereports/job/{jobId}")
     public ResponseEntity<List<TimeReportDto>> getTimeReportsByJob(@PathVariable Long jobId){
         return ResponseEntity.ok(timeReportService.getTimeReportsForJob(jobId));
+    }
+
+    @GetMapping("/quotes")
+    public ResponseEntity<List<QuoteDto>> getAllQuotes(){
+        return ResponseEntity.ok(quoteService.getAllQuotes());
+    }
+
+    @PutMapping("quotes/{id}")
+    public ResponseEntity<QuoteDto> updateQuote(@PathVariable Long id, @RequestBody QuoteDto quoteDto){
+        return ResponseEntity.ok(quoteService.updateQuote(id, quoteDto));
+    }
+
+    @DeleteMapping("/quotes/{id}")
+    public ResponseEntity<Void> deleteQuote(@PathVariable Long id){
+        quoteService.deleteQuote(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/quotes/{jobId}")
+    public ResponseEntity<QuoteDto> createQuote(@PathVariable Long jobId, @RequestBody QuoteDto quoteDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(quoteService.createQuote(jobId, quoteDto));
     }
 
 }
