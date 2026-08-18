@@ -28,6 +28,13 @@ public class Message {
 
     public Message(){}
 
+    public Message(Conversation conversation, User user, String content, LocalDateTime sentAt) {
+        this.conversation = conversation;
+        this.user = user;
+        this.content = content;
+        this.sentAt = sentAt;
+    }
+
     public Long getId() {
         return id;
     }
