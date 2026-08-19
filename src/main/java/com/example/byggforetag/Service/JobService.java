@@ -5,13 +5,8 @@ import com.example.byggforetag.DTO.JobItemDto;
 import com.example.byggforetag.Enums.JobStatus;
 import com.example.byggforetag.Exception.JobNotFoundException;
 import com.example.byggforetag.Exception.UserNotFoundException;
-import com.example.byggforetag.Model.Job;
-import com.example.byggforetag.Model.JobItem;
-import com.example.byggforetag.Model.ServiceType;
-import com.example.byggforetag.Model.User;
-import com.example.byggforetag.Repository.JobRepository;
-import com.example.byggforetag.Repository.ServiceTypeRepository;
-import com.example.byggforetag.Repository.UserRepository;
+import com.example.byggforetag.Model.*;
+import com.example.byggforetag.Repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,12 +17,16 @@ public class JobService {
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
     private final ServiceTypeRepository serviceTypeRepository;
+    private final ConversationRepository conversationRepository;
+    private final ConversationParticipantRepository conversationParticipantRepository;
 
 
-    public JobService(JobRepository jobRepository, UserRepository userRepository, ServiceTypeRepository serviceTypeRepository) {
+    public JobService(JobRepository jobRepository, UserRepository userRepository, ServiceTypeRepository serviceTypeRepository, ConversationRepository conversationRepository, ConversationParticipantRepository conversationParticipantRepository) {
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.serviceTypeRepository = serviceTypeRepository;
+        this.conversationRepository = conversationRepository;
+        this.conversationParticipantRepository = conversationParticipantRepository;
     }
 
     public JobDto createJob(Long userId, JobDto jobDto){
@@ -36,6 +35,13 @@ public class JobService {
 
          Job job = new Job(new ArrayList<>(), new ArrayList<>(), user, JobStatus.RECEIVED, jobDto.getAddress(), jobDto.getScheduledDate());
          jobRepository.save(job);
+
+        Conversation conversation = new Conversation(job, "Jobb: " + job.getId());
+        conversationRepository.save(conversation);
+
+        ConversationParticipant conversationParticipant = new ConversationParticipant(conversation, user);
+        conversationParticipantRepository.save(conversationParticipant);
+
 
          List<JobItem> jobItems = new ArrayList<>(jobDto.getJobItem().stream()
                  .map(jobItemDto -> {
