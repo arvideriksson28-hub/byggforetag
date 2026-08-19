@@ -23,8 +23,9 @@ public class AdminController {
     private final ConversationService conversationService;
     private final NotificationService notificationService;
     private final CertificationService certificationService;
+    private final ReviewService reviewService;
 
-    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService, LeaveRequestService leaveRequestService, TimeReportService timeReportService, QuoteService quoteService, ConversationService conversationService, NotificationService notificationService, CertificationService certificationService) {
+    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService, LeaveRequestService leaveRequestService, TimeReportService timeReportService, QuoteService quoteService, ConversationService conversationService, NotificationService notificationService, CertificationService certificationService, ReviewService reviewService) {
         this.userService = userService;
         this.jobService = jobService;
         this.employeeService = employeeService;
@@ -35,6 +36,7 @@ public class AdminController {
         this.conversationService = conversationService;
         this.notificationService = notificationService;
         this.certificationService = certificationService;
+        this.reviewService = reviewService;
 
     }
 
@@ -176,6 +178,11 @@ public class AdminController {
     @PutMapping("/certifications/{id}")
     public ResponseEntity<CertificationDto> updateCertification(@PathVariable Long id, @RequestBody CertificationDto certificationDto){
         return ResponseEntity.ok(certificationService.updateCertification(id, certificationDto));
+    }
+
+    @GetMapping("/reviews")
+    public ResponseEntity<List<ReviewDto>> getAllReviews(){
+        return ResponseEntity.ok(reviewService.getAllReview());
     }
 
 }
