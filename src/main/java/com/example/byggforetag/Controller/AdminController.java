@@ -21,8 +21,9 @@ public class AdminController {
     private final TimeReportService timeReportService;
     private final QuoteService quoteService;
     private final ConversationService conversationService;
+    private final NotificationService notificationService;
 
-    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService, LeaveRequestService leaveRequestService, TimeReportService timeReportService, QuoteService quoteService, ConversationService conversationService) {
+    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService, LeaveRequestService leaveRequestService, TimeReportService timeReportService, QuoteService quoteService, ConversationService conversationService, NotificationService notificationService) {
         this.userService = userService;
         this.jobService = jobService;
         this.employeeService = employeeService;
@@ -31,6 +32,7 @@ public class AdminController {
         this.timeReportService = timeReportService;
         this.quoteService = quoteService;
         this.conversationService = conversationService;
+        this.notificationService = notificationService;
 
     }
 
@@ -146,6 +148,16 @@ public class AdminController {
     @GetMapping("/conversations")
     public ResponseEntity<List<ConversationDto>> getAllConversations(){
         return ResponseEntity.ok(conversationService.getAllConversations());
+    }
+
+    @PostMapping("/notifications/{userId}")
+    public ResponseEntity<NotificationDto> createNotification(@PathVariable Long userId, @RequestBody NotificationDto notificationDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(notificationService.createNotification(userId, notificationDto));
+    }
+
+    @GetMapping("/notifications")
+    public ResponseEntity<List<NotificationDto>> getAllNotifications(){
+        return ResponseEntity.ok(notificationService.getAllNotifications());
     }
 
 }
