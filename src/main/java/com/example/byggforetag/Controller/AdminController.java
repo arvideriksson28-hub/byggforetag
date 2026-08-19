@@ -22,8 +22,9 @@ public class AdminController {
     private final QuoteService quoteService;
     private final ConversationService conversationService;
     private final NotificationService notificationService;
+    private final CertificationService certificationService;
 
-    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService, LeaveRequestService leaveRequestService, TimeReportService timeReportService, QuoteService quoteService, ConversationService conversationService, NotificationService notificationService) {
+    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService, LeaveRequestService leaveRequestService, TimeReportService timeReportService, QuoteService quoteService, ConversationService conversationService, NotificationService notificationService, CertificationService certificationService) {
         this.userService = userService;
         this.jobService = jobService;
         this.employeeService = employeeService;
@@ -33,6 +34,7 @@ public class AdminController {
         this.quoteService = quoteService;
         this.conversationService = conversationService;
         this.notificationService = notificationService;
+        this.certificationService = certificationService;
 
     }
 
@@ -158,6 +160,22 @@ public class AdminController {
     @GetMapping("/notifications")
     public ResponseEntity<List<NotificationDto>> getAllNotifications(){
         return ResponseEntity.ok(notificationService.getAllNotifications());
+    }
+
+    @PostMapping("/certifications/{employeeId}")
+    public ResponseEntity<CertificationDto> createCertification(@PathVariable Long employeeId, @RequestBody CertificationDto certificationDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(certificationService.createCertification(employeeId, certificationDto));
+    }
+
+    @DeleteMapping("/certifications/{id}")
+    public ResponseEntity<Void> deleteCertification(@PathVariable Long id){
+        certificationService.deleteCertification(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/certifications/{id}")
+    public ResponseEntity<CertificationDto> updateCertification(@PathVariable Long id, @RequestBody CertificationDto certificationDto){
+        return ResponseEntity.ok(certificationService.updateCertification(id, certificationDto));
     }
 
 }
