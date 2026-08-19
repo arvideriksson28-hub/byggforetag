@@ -1,6 +1,7 @@
 package com.example.byggforetag.DTO;
 
 import com.example.byggforetag.Model.Certification;
+import com.example.byggforetag.Model.Employee;
 
 import java.time.LocalDate;
 
@@ -23,6 +24,15 @@ public class CertificationDto {
                 certification.getName(),
                 certification.getIssuedDate(),
                 certification.getExpiryDate()
+        );
+    }
+
+    public Certification toEntity(Employee employee){
+        return new Certification(
+                employee,
+                this.getName(),
+                this.issuedDate,
+                this.expiryDate
         );
     }
 

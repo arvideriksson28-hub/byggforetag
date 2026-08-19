@@ -4,12 +4,9 @@ import com.example.byggforetag.DTO.JobAssignmentDto;
 import com.example.byggforetag.DTO.JobDto;
 import com.example.byggforetag.Exception.EmployeeNotFoundException;
 import com.example.byggforetag.Exception.JobNotFoundException;
-import com.example.byggforetag.Model.Employee;
-import com.example.byggforetag.Model.Job;
-import com.example.byggforetag.Model.JobAssignment;
-import com.example.byggforetag.Repository.EmployeeRepository;
-import com.example.byggforetag.Repository.JobAssignmentRepository;
-import com.example.byggforetag.Repository.JobRepository;
+import com.example.byggforetag.Exception.UserNotFoundException;
+import com.example.byggforetag.Model.*;
+import com.example.byggforetag.Repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,20 +16,22 @@ public class JobAssignmentService {
     private final JobAssignmentRepository jobAssignmentRepository;
     private final EmployeeRepository employeeRepository;
     private final JobRepository jobRepository;
+    private final ConversationRepository conversationRepository;
+    private final ConversationParticipantRepository conversationParticipantRepository;
 
-    public JobAssignmentService(JobAssignmentRepository jobAssignmentRepository, EmployeeRepository employeeRepository, JobRepository jobRepository) {
+
+    public JobAssignmentService(JobAssignmentRepository jobAssignmentRepository, EmployeeRepository employeeRepository, JobRepository jobRepository, ConversationRepository conversationRepository, ConversationParticipantRepository conversationParticipantRepository) {
         this.jobAssignmentRepository = jobAssignmentRepository;
         this.employeeRepository = employeeRepository;
         this.jobRepository = jobRepository;
+        this.conversationRepository = conversationRepository;
+        this.conversationParticipantRepository = conversationParticipantRepository;
     }
 
     public List<JobAssignmentDto> getJobAssignmentByJobId(Long id){
-        List<JobAssignment> jobAssignments = jobAssignmentRepository.findAllByJobId(id)
-                .orElseThrow(() -> new RuntimeException("hittade inga jobassignments med id: " + id));
-        return jobAssignments.stream()
+        return jobAssignmentRepository.findAllByJobId(id).stream()
                 .map(JobAssignmentDto::fromEntity)
                 .toList();
-
     }
 
     public JobAssignmentDto assignEmployee(JobAssignmentDto jobAssignmentDto){
@@ -40,8 +39,22 @@ public class JobAssignmentService {
                 .orElseThrow(()-> new EmployeeNotFoundException(jobAssignmentDto.getEmployeeId()));
         Job job = jobRepository.findById(jobAssignmentDto.getJobId())
                 .orElseThrow(()-> new JobNotFoundException(jobAssignmentDto.getJobId()));
+
+        User user = employee.getUser();
+        Conversation conversation = conversationRepository.findConversationByJobId(job.getId())
+                .orElseThrow(()-> new JobNotFoundException(job.getId()));
+
+        ConversationParticipant conversationParticipant = new ConversationParticipant(conversation,user);
+        conversationParticipantRepository.save(conversationParticipant);
+
         JobAssignment saved = jobAssignmentRepository.save(jobAssignmentDto.toEntity(employee, job));
         return JobAssignmentDto.fromEntity(saved);
+    }
+
+    public List<JobAssignmentDto> getAllJobAssignmentsByEmployeeId(Long employeeId){
+        return jobAssignmentRepository.findAllByEmployeeId(employeeId).stream()
+                .map(JobAssignmentDto::fromEntity)
+                .toList();
     }
 
     public void removeEmployee(Long jobAssignmentId){
