@@ -25,7 +25,7 @@ public class Review {
     @Min(1)
     @Max(5)
     @Column(name = "rating", nullable = false)
-    private int rating;
+    private Integer rating;
 
     @Column(name = "comment", nullable = true)
     private String comment;
@@ -35,7 +35,7 @@ public class Review {
 
     public Review(){}
 
-    public Review(Job job, User user, int rating, String comment, LocalDate createdAt) {
+    public Review(Job job, User user, Integer rating, String comment, LocalDate createdAt) {
         this.job = job;
         this.user = user;
         this.rating = rating;
@@ -63,11 +63,11 @@ public class Review {
         this.user = user;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 
