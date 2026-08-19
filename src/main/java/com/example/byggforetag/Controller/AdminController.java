@@ -20,8 +20,9 @@ public class AdminController {
     private final LeaveRequestService leaveRequestService;
     private final TimeReportService timeReportService;
     private final QuoteService quoteService;
+    private final ConversationService conversationService;
 
-    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService, LeaveRequestService leaveRequestService, TimeReportService timeReportService, QuoteService quoteService) {
+    public AdminController(UserService userService, JobService jobService, EmployeeService employeeService, JobAssignmentService jobAssignmentService, LeaveRequestService leaveRequestService, TimeReportService timeReportService, QuoteService quoteService, ConversationService conversationService) {
         this.userService = userService;
         this.jobService = jobService;
         this.employeeService = employeeService;
@@ -29,6 +30,7 @@ public class AdminController {
         this.leaveRequestService = leaveRequestService;
         this.timeReportService = timeReportService;
         this.quoteService = quoteService;
+        this.conversationService = conversationService;
 
     }
 
@@ -139,6 +141,11 @@ public class AdminController {
     @PostMapping("/quotes/{jobId}")
     public ResponseEntity<QuoteDto> createQuote(@PathVariable Long jobId, @RequestBody QuoteDto quoteDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(quoteService.createQuote(jobId, quoteDto));
+    }
+
+    @GetMapping("/conversations")
+    public ResponseEntity<List<ConversationDto>> getAllConversations(){
+        return ResponseEntity.ok(conversationService.getAllConversations());
     }
 
 }
