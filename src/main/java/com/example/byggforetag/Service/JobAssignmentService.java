@@ -29,12 +29,9 @@ public class JobAssignmentService {
     }
 
     public List<JobAssignmentDto> getJobAssignmentByJobId(Long id){
-        List<JobAssignment> jobAssignments = jobAssignmentRepository.findAllByJobId(id)
-                .orElseThrow(() -> new RuntimeException("hittade inga jobassignments med id: " + id));
-        return jobAssignments.stream()
+        return jobAssignmentRepository.findAllByJobId(id).stream()
                 .map(JobAssignmentDto::fromEntity)
                 .toList();
-
     }
 
     public JobAssignmentDto assignEmployee(JobAssignmentDto jobAssignmentDto){
@@ -52,6 +49,12 @@ public class JobAssignmentService {
 
         JobAssignment saved = jobAssignmentRepository.save(jobAssignmentDto.toEntity(employee, job));
         return JobAssignmentDto.fromEntity(saved);
+    }
+
+    public List<JobAssignmentDto> getAllJobAssignmentsByEmployeeId(Long employeeId){
+        return jobAssignmentRepository.findAllByEmployeeId(employeeId).stream()
+                .map(JobAssignmentDto::fromEntity)
+                .toList();
     }
 
     public void removeEmployee(Long jobAssignmentId){

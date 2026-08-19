@@ -11,5 +11,6 @@ import java.util.Optional;
 @Repository
 public interface JobAssignmentRepository extends JpaRepository<JobAssignment, Long> {
 
-    Optional<List<JobAssignment>> findAllByJobId(Long jobId);
+    List<JobAssignment> findAllByJobId(Long jobId);
+    List<JobAssignment> findAllByEmployeeId(Long employeeId);
 }
