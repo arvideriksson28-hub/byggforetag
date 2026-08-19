@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface CertificationRepository extends JpaRepository<Certification, Long> {
-    List<Certification> findByEmployeeId(Long employeeId);
+    List<Certification> findAllCertificationByEmployeeId(Long employeeId);
 }
