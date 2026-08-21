@@ -78,18 +78,18 @@ public class AdminController {
     }
 
     @GetMapping("/employees")
-    public ResponseEntity<List<EmployeeDto>> getAllEmployees(){
+    public ResponseEntity<List<EmployeeResponseDto>> getAllEmployees(){
         return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
     @GetMapping("/employees/{id}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long id){
+    public ResponseEntity<EmployeeResponseDto> getEmployeeById(@PathVariable Long id){
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
     @PutMapping("/employees/{id}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDto employeeDto){
-        return ResponseEntity.ok(employeeService.updateEmployee(employeeDto, id));
+    public ResponseEntity<EmployeeResponseDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequestDto employeeRequestDto){
+        return ResponseEntity.ok(employeeService.updateEmployee(employeeRequestDto, id));
     }
 
     @PostMapping("/jobassignments/assignEmployee")
