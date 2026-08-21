@@ -49,9 +49,7 @@ public class Job {
 
     public Job(){}
 
-    public Job(List<JobItem> jobItems, List<JobAssignment> jobAssignments, User user, JobStatus jobStatus, Address address, LocalDate scheduledDate) {
-        this.jobItems = jobItems;
-        this.jobAssignments = jobAssignments;
+    public Job(User user, JobStatus jobStatus, Address address, LocalDate scheduledDate) {
         this.user = user;
         this.jobStatus = jobStatus;
         this.address = address;

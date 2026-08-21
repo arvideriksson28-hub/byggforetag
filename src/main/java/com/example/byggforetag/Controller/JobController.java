@@ -1,6 +1,7 @@
 package com.example.byggforetag.Controller;
 
-import com.example.byggforetag.DTO.JobDto;
+import com.example.byggforetag.DTO.JobRequestDto;
+import com.example.byggforetag.DTO.JobResponseDto;
 import com.example.byggforetag.Service.JobService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +19,17 @@ public class JobController {
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<JobDto> bookJob(@PathVariable Long userId,@RequestBody JobDto jobDto){
-       return ResponseEntity.status(HttpStatus.CREATED).body(jobService.createJob(userId, jobDto));
+    public ResponseEntity<JobResponseDto> bookJob(@PathVariable Long userId, @RequestBody JobRequestDto jobRequestDto){
+       return ResponseEntity.status(HttpStatus.CREATED).body(jobService.createJob(userId, jobRequestDto));
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<JobDto>> seeBookedJobs(@PathVariable Long userId){
+    public ResponseEntity<List<JobResponseDto>> seeBookedJobs(@PathVariable Long userId){
         return ResponseEntity.ok(jobService.getJobsByUserId(userId));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<JobDto> seeJob(@PathVariable Long id){
+    public ResponseEntity<JobResponseDto> seeJob(@PathVariable Long id){
         return ResponseEntity.ok(jobService.getJobById(id));
     }
 
@@ -39,7 +40,7 @@ public class JobController {
     }
 
     @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<List<JobDto>> getBookedJobs(@PathVariable Long employeeId){
+    public ResponseEntity<List<JobResponseDto>> getBookedJobs(@PathVariable Long employeeId){
         return ResponseEntity.ok(jobService.getJobsByEmployeeId(employeeId));
     }
 

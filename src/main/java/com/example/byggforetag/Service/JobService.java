@@ -1,9 +1,10 @@
 package com.example.byggforetag.Service;
 
-import com.example.byggforetag.DTO.JobDto;
-import com.example.byggforetag.DTO.JobItemDto;
+import com.example.byggforetag.DTO.JobRequestDto;
+import com.example.byggforetag.DTO.JobResponseDto;
 import com.example.byggforetag.Enums.JobStatus;
 import com.example.byggforetag.Exception.JobNotFoundException;
+import com.example.byggforetag.Exception.ServiceTypeNotFoundException;
 import com.example.byggforetag.Exception.UserNotFoundException;
 import com.example.byggforetag.Model.*;
 import com.example.byggforetag.Repository.*;
@@ -29,11 +30,11 @@ public class JobService {
         this.conversationParticipantRepository = conversationParticipantRepository;
     }
 
-    public JobDto createJob(Long userId, JobDto jobDto){
+    public JobResponseDto createJob(Long userId, JobRequestDto jobRequestDto){
          User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
-         Job job = new Job(new ArrayList<>(), new ArrayList<>(), user, JobStatus.RECEIVED, jobDto.getAddress(), jobDto.getScheduledDate());
+         Job job = jobRequestDto.toEntity(user);
          jobRepository.save(job);
 
         Conversation conversation = new Conversation(job, "Jobb: " + job.getId());
@@ -43,29 +44,29 @@ public class JobService {
         conversationParticipantRepository.save(conversationParticipant);
 
 
-         List<JobItem> jobItems = new ArrayList<>(jobDto.getJobItem().stream()
+         List<JobItem> jobItems = new ArrayList<>(jobRequestDto.getJobItem().stream()
                  .map(jobItemDto -> {
                      ServiceType serviceType = serviceTypeRepository.findById(jobItemDto.getServiceTypeId())
-                             .orElseThrow(() -> new RuntimeException("ServiceType hittades inte"));
+                             .orElseThrow(() -> new ServiceTypeNotFoundException(jobItemDto.getServiceTypeId()));
                      return jobItemDto.toEntity(serviceType, job);
                  })
                  .toList());
          job.setJobItems(jobItems);
 
-         return JobDto.fromEntity(jobRepository.save(job));
+         return JobResponseDto.fromEntity(jobRepository.save(job));
     }
 
-    public List<JobDto> getJobsByUserId(Long userId){
+    public List<JobResponseDto> getJobsByUserId(Long userId){
         List<Job> jobs = jobRepository.findByUserId(userId);
         return jobs.stream()
-                .map(JobDto::fromEntity)
+                .map(JobResponseDto::fromEntity)
                 .toList();
     }
 
-    public JobDto getJobById(Long id){
+    public JobResponseDto getJobById(Long id){
         Job job = jobRepository.findById(id)
                 .orElseThrow(() -> new JobNotFoundException(id));
-        return JobDto.fromEntity(job);
+        return JobResponseDto.fromEntity(job);
     }
 
     public void deleteJob(Long id){
@@ -74,28 +75,28 @@ public class JobService {
         jobRepository.delete(job);
     }
 
-    public List<JobDto> getJobsByEmployeeId(Long employeeId){
+    public List<JobResponseDto> getJobsByEmployeeId(Long employeeId){
         List<Job> jobs = jobRepository.findJobsByEmployeeId(employeeId);
         if (jobs.isEmpty()){
             throw new JobNotFoundException(employeeId);
         }
         return jobs.stream()
-                .map(JobDto::fromEntity)
+                .map(JobResponseDto::fromEntity)
                 .toList();
     }
 
-    public List<JobDto> getAllJobs(){
+    public List<JobResponseDto> getAllJobs(){
         List<Job> jobs = jobRepository.findAll();
         return jobs.stream()
-                .map(JobDto::fromEntity)
+                .map(JobResponseDto::fromEntity)
                 .toList();
     }
 
-    public JobDto updateJobStatus(Long id, JobStatus jobStatus){
+    public JobResponseDto updateJobStatus(Long id, JobStatus jobStatus){
         Job job = jobRepository.findById(id)
                 .orElseThrow(() -> new JobNotFoundException(id));
         job.setJobStatus(jobStatus);
-        return JobDto.fromEntity(jobRepository.save(job));
+        return JobResponseDto.fromEntity(jobRepository.save(job));
     }
 
 
