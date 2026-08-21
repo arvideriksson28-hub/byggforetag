@@ -1,6 +1,7 @@
 package com.example.byggforetag.Controller;
 
-import com.example.byggforetag.DTO.EmployeeDto;
+import com.example.byggforetag.DTO.EmployeeRequestDto;
+import com.example.byggforetag.DTO.EmployeeResponseDto;
 import com.example.byggforetag.Service.EmployeeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> seeProfile(@PathVariable Long id){
+    public ResponseEntity<EmployeeResponseDto> seeProfile(@PathVariable Long id){
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 }

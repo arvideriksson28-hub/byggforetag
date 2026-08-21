@@ -1,10 +1,8 @@
 package com.example.byggforetag.Service;
 
 import com.example.byggforetag.DTO.JobAssignmentDto;
-import com.example.byggforetag.DTO.JobDto;
 import com.example.byggforetag.Exception.EmployeeNotFoundException;
 import com.example.byggforetag.Exception.JobNotFoundException;
-import com.example.byggforetag.Exception.UserNotFoundException;
 import com.example.byggforetag.Model.*;
 import com.example.byggforetag.Repository.*;
 import org.springframework.stereotype.Service;

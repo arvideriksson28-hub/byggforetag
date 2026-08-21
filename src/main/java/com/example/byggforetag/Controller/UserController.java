@@ -1,7 +1,8 @@
 package com.example.byggforetag.Controller;
 
-import com.example.byggforetag.DTO.UserDto;
+import com.example.byggforetag.DTO.UserRequestDto;
 
+import com.example.byggforetag.DTO.UserResponseDto;
 import com.example.byggforetag.Service.UserService;
 
 import org.springframework.http.HttpStatus;
@@ -18,18 +19,18 @@ public class UserController {
     }
 
     @PostMapping("/register/user")
-    public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(userDto));
+    public ResponseEntity<UserResponseDto> registerUser(@RequestBody UserRequestDto userRequestDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(userRequestDto));
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserDto> seeProfile(@PathVariable Long id){
+    public ResponseEntity<UserResponseDto> seeProfile(@PathVariable Long id){
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto ){
-        return ResponseEntity.ok(userService.updateUser(id, userDto));
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto){
+        return ResponseEntity.ok(userService.updateUser(id, userRequestDto));
     }
 
     @DeleteMapping("/users/{id}")

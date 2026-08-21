@@ -1,32 +1,35 @@
 package com.example.byggforetag.DTO;
 
 
+import com.example.byggforetag.Enums.JobStatus;
 import com.example.byggforetag.Model.Job;
+import com.example.byggforetag.Model.User;
 import com.example.byggforetag.embeddable.Address;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class JobDto {
+public class JobRequestDto {
 
     private Address address;
     private LocalDate scheduledDate;
     private List<JobItemDto> jobItem;
 
-    public JobDto() {
+    public JobRequestDto() {
     }
 
-    public JobDto(Address address, LocalDate scheduledDate, List<JobItemDto> jobItem) {
+    public JobRequestDto(Address address, LocalDate scheduledDate, List<JobItemDto> jobItem) {
         this.address = address;
         this.scheduledDate = scheduledDate;
         this.jobItem = jobItem;
     }
 
-    public static JobDto fromEntity(Job job){
-        return new JobDto(
-                job.getAddress(),
-                job.getScheduledDate(),
-                job.getJobItems().stream().map(JobItemDto::fromEntity).toList()
+    public Job toEntity(User user){
+        return new Job(
+                user,
+                JobStatus.RECEIVED,
+                this.address,
+                this.scheduledDate
         );
     }
 

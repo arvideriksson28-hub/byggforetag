@@ -1,6 +1,7 @@
 package com.example.byggforetag.Service;
 
-import com.example.byggforetag.DTO.UserDto;
+import com.example.byggforetag.DTO.UserRequestDto;
+import com.example.byggforetag.DTO.UserResponseDto;
 import com.example.byggforetag.Enums.Role;
 import com.example.byggforetag.Exception.EmailAlreadyExistsException;
 import com.example.byggforetag.Exception.UserNotFoundException;
@@ -26,67 +27,69 @@ public class UserService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Optional<User> findByEmail(String email){
-        Optional<User> user = userRepository.findByEmail(email);
-        return user;
+    public UserResponseDto findByEmail(String email){
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new UserNotFoundException(email));
+        return UserResponseDto.fromEntity(user);
     }
 
     public boolean existsByEmail(String email){
         return userRepository.existsByEmail(email);
     }
 
-    public List<User> findAllByRole(Role role){
-        return userRepository.findAllByRole(role);
+    public List<UserResponseDto> findAllByRole(Role role){
+        return userRepository.findAllByRole(role).stream()
+                .map(UserResponseDto::fromEntity)
+                .toList();
     }
 
-    public UserDto registerUser(UserDto userDto){
-        if (userRepository.existsByEmail(userDto.getEmail())) {
-            throw new EmailAlreadyExistsException(userDto.getEmail());
+    public UserResponseDto registerUser(UserRequestDto userRequestDto){
+        if (userRepository.existsByEmail(userRequestDto.getEmail())) {
+            throw new EmailAlreadyExistsException(userRequestDto.getEmail());
         }
 
-        User user = userDto.toEntity(Role.ROLE_USER);
-        return UserDto.fromEntity(userRepository.save(user));
+        User user = userRequestDto.toEntity(Role.ROLE_USER);
+        return UserResponseDto.fromEntity(userRepository.save(user));
     }
 
-    public UserDto registerEmployee(UserDto userDto){
-        if (userRepository.existsByEmail(userDto.getEmail())){
-            throw new EmailAlreadyExistsException(userDto.getEmail());
+    public UserResponseDto registerEmployee(UserRequestDto userRequestDto){
+        if (userRepository.existsByEmail(userRequestDto.getEmail())){
+            throw new EmailAlreadyExistsException(userRequestDto.getEmail());
         }
 
-        User user = userDto.toEntity(Role.ROLE_EMPLOYEE);
+        User user = userRequestDto.toEntity(Role.ROLE_EMPLOYEE);
         userRepository.save(user);
 
         Employee employee = new Employee(user, new ArrayList<>(), LocalDate.now());
         employeeRepository.save(employee);
 
-        return UserDto.fromEntity(user);
+        return UserResponseDto.fromEntity(user);
     }
 
-    public UserDto getUserById(Long id){
+    public UserResponseDto getUserById(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-       return UserDto.fromEntity(user);
+       return UserResponseDto.fromEntity(user);
     }
 
-    public List<UserDto> getallUsers(){
+    public List<UserResponseDto> getallUsers(){
       List<User> users = userRepository.findAll();
       return users.stream()
-              .map(UserDto::fromEntity)
+              .map(UserResponseDto::fromEntity)
               .toList();
     }
-    public UserDto updateUser(Long id,UserDto userDto){
+    public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto){
        User user = userRepository.findById(id)
                .orElseThrow(() -> new UserNotFoundException(id));
-       if (userDto.getEmail() != null){
-           user.setEmail(userDto.getEmail());
+       if (userRequestDto.getEmail() != null){
+           user.setEmail(userRequestDto.getEmail());
        }
-       if (userDto.getName() != null){
-           user.setName(userDto.getName());
+       if (userRequestDto.getName() != null){
+           user.setName(userRequestDto.getName());
        }
-       if (userDto.getPassword() != null){
-           user.setPassword(userDto.getPassword());
+       if (userRequestDto.getPassword() != null){
+           user.setPassword(userRequestDto.getPassword());
        }
-       return UserDto.fromEntity(userRepository.save(user));
+       return UserResponseDto.fromEntity(userRepository.save(user));
     }
 
     public void deleteUser(Long id){

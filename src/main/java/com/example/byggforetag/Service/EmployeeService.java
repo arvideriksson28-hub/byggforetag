@@ -1,6 +1,7 @@
 package com.example.byggforetag.Service;
 
-import com.example.byggforetag.DTO.EmployeeDto;
+import com.example.byggforetag.DTO.EmployeeRequestDto;
+import com.example.byggforetag.DTO.EmployeeResponseDto;
 import com.example.byggforetag.Exception.EmployeeNotFoundException;
 import com.example.byggforetag.Model.Employee;
 import com.example.byggforetag.Repository.CertificationRepository;
@@ -13,39 +14,37 @@ import java.util.List;
 @Service
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
-    private final CertificationRepository certificationRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository, CertificationRepository certificationRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
-        this.certificationRepository = certificationRepository;
     }
 
     @Transactional
-    public EmployeeDto getEmployeeById(Long id){
+    public EmployeeResponseDto getEmployeeById(Long id){
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() ->new EmployeeNotFoundException(id));
-        return EmployeeDto.fromEntity(employee);
+        return EmployeeResponseDto.fromEntity(employee);
 
     }
 
     @Transactional
-    public List<EmployeeDto> getAllEmployees(){
+    public List<EmployeeResponseDto> getAllEmployees(){
         return employeeRepository.findAll().stream()
-                .map(EmployeeDto::fromEntity)
+                .map(EmployeeResponseDto::fromEntity)
                 .toList();
     }
 
-    public EmployeeDto updateEmployee(EmployeeDto employeeDto, Long id){
+    public EmployeeResponseDto updateEmployee(EmployeeRequestDto employeeRequestDto, Long id){
         Employee employee = employeeRepository.findByUserId(id)
                 .orElseThrow(()-> new  EmployeeNotFoundException(id));
 
-        if (employeeDto.getHireDate() != null){
-            employee.setHireDate(employeeDto.getHireDate());
+        if (employeeRequestDto.getHireDate() != null){
+            employee.setHireDate(employeeRequestDto.getHireDate());
         }
-        if (employeeDto.getVacationDays() != null){
-            employee.setVacationDays(employeeDto.getVacationDays());
+        if (employeeRequestDto.getVacationDays() != null){
+            employee.setVacationDays(employeeRequestDto.getVacationDays());
         }
-        return EmployeeDto.fromEntity(employeeRepository.save(employee));
+        return EmployeeResponseDto.fromEntity(employeeRepository.save(employee));
     }
 
 }

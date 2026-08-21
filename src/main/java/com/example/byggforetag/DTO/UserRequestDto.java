@@ -3,31 +3,22 @@ package com.example.byggforetag.DTO;
 import com.example.byggforetag.Enums.Role;
 import com.example.byggforetag.Model.User;
 
-public class UserDto {
+public class UserRequestDto {
     private String name;
     private String email;
     private String password;
 
-    public UserDto() {}
+    public UserRequestDto() {}
 
-    public UserDto(String name, String email, String password) {
+    public UserRequestDto(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public static UserDto fromEntity(User user){
-        return new UserDto(
-                user.getName(),
-                user.getEmail(),
-                null
-        );
-    }
-
     public User toEntity(Role role){
         return new User(this.name, this.email, this.password, role);
     }
-
 
 
     public String getName() {

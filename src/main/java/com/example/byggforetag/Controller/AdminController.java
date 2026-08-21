@@ -41,17 +41,17 @@ public class AdminController {
     }
 
     @PostMapping("/register/employee")
-    public ResponseEntity<UserDto> registerEmployee(@RequestBody UserDto userDto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerEmployee(userDto));
+    public ResponseEntity<UserResponseDto> registerEmployee(@RequestBody UserRequestDto userRequestDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerEmployee(userRequestDto));
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserDto>> getAllUsers(){
+    public ResponseEntity<List<UserResponseDto>> getAllUsers(){
         return ResponseEntity.ok(userService.getallUsers());
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id){
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id){
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
@@ -62,12 +62,12 @@ public class AdminController {
     }
 
     @GetMapping("/jobs")
-    public ResponseEntity<List<JobDto>> getAllJobs(){
+    public ResponseEntity<List<JobResponseDto>> getAllJobs(){
         return ResponseEntity.ok(jobService.getAllJobs());
     }
 
     @PutMapping("/jobs/{id}/status")
-    public ResponseEntity<JobDto> updateJobStatus(@PathVariable Long id,@RequestBody JobStatus jobStatus){
+    public ResponseEntity<JobResponseDto> updateJobStatus(@PathVariable Long id, @RequestBody JobStatus jobStatus){
         return ResponseEntity.ok(jobService.updateJobStatus(id, jobStatus));
     }
 
@@ -78,18 +78,18 @@ public class AdminController {
     }
 
     @GetMapping("/employees")
-    public ResponseEntity<List<EmployeeDto>> getAllEmployees(){
+    public ResponseEntity<List<EmployeeResponseDto>> getAllEmployees(){
         return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
     @GetMapping("/employees/{id}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long id){
+    public ResponseEntity<EmployeeResponseDto> getEmployeeById(@PathVariable Long id){
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
     @PutMapping("/employees/{id}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDto employeeDto){
-        return ResponseEntity.ok(employeeService.updateEmployee(employeeDto, id));
+    public ResponseEntity<EmployeeResponseDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequestDto employeeRequestDto){
+        return ResponseEntity.ok(employeeService.updateEmployee(employeeRequestDto, id));
     }
 
     @PostMapping("/jobassignments/assignEmployee")
