@@ -4,11 +4,13 @@ import com.example.byggforetag.DTO.UserRequestDto;
 import com.example.byggforetag.DTO.UserResponseDto;
 import com.example.byggforetag.Enums.Role;
 import com.example.byggforetag.Exception.EmailAlreadyExistsException;
+import com.example.byggforetag.Exception.UnauthorizedException;
 import com.example.byggforetag.Exception.UserNotFoundException;
 import com.example.byggforetag.Model.Employee;
 import com.example.byggforetag.Model.User;
 import com.example.byggforetag.Repository.EmployeeRepository;
 import com.example.byggforetag.Repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,10 +23,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final EmployeeRepository employeeRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository) {
+    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserResponseDto findByEmail(String email){
@@ -48,6 +52,7 @@ public class UserService {
         }
 
         User user = userRequestDto.toEntity(Role.ROLE_USER);
+        user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         return UserResponseDto.fromEntity(userRepository.save(user));
     }
 
@@ -57,12 +62,24 @@ public class UserService {
         }
 
         User user = userRequestDto.toEntity(Role.ROLE_EMPLOYEE);
+        user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         userRepository.save(user);
 
         Employee employee = new Employee(user, new ArrayList<>(), LocalDate.now());
         employeeRepository.save(employee);
 
         return UserResponseDto.fromEntity(user);
+    }
+
+    public UserResponseDto seeOwnProfile(String email, Long id){
+        User loggedInUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
+
+        if (!loggedInUser.getId().equals(id)){
+            throw new UnauthorizedException("Du har inte behörighet att se denna profil");
+        }
+
+        return UserResponseDto.fromEntity(loggedInUser);
     }
 
     public UserResponseDto getUserById(Long id){

@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -25,8 +27,8 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserResponseDto> seeProfile(@PathVariable Long id){
-        return ResponseEntity.ok(userService.getUserById(id));
+    public ResponseEntity<UserResponseDto> seeProfile(@PathVariable Long id, Principal principal){
+        return ResponseEntity.ok(userService.seeOwnProfile(principal.getName(), id));
     }
 
     @PutMapping("/users/{id}")
