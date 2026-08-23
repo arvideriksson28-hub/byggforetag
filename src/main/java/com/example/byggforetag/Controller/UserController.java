@@ -5,6 +5,7 @@ import com.example.byggforetag.DTO.UserRequestDto;
 import com.example.byggforetag.DTO.UserResponseDto;
 import com.example.byggforetag.Service.UserService;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping("/register/user")
-    public ResponseEntity<UserResponseDto> registerUser(@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<UserResponseDto> registerUser(@Valid @RequestBody UserRequestDto userRequestDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(userRequestDto));
     }
 

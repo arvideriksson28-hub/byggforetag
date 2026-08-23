@@ -4,6 +4,7 @@ import com.example.byggforetag.DTO.*;
 import com.example.byggforetag.Enums.JobStatus;
 import com.example.byggforetag.Enums.LeaveStatus;
 import com.example.byggforetag.Service.*;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class AdminController {
     }
 
     @PostMapping("/register/employee")
-    public ResponseEntity<UserResponseDto> registerEmployee(@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<UserResponseDto> registerEmployee(@Valid @RequestBody UserRequestDto userRequestDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerEmployee(userRequestDto));
     }
 
