@@ -2,10 +2,20 @@ package com.example.byggforetag.DTO;
 
 import com.example.byggforetag.Enums.Role;
 import com.example.byggforetag.Model.User;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class UserRequestDto {
+    @NotBlank(message = "Namn får inte vara tomt")
     private String name;
+
+    @NotBlank(message = "Email får inte vara tomt")
+    @Email(message = "Email måste vara giltig")
     private String email;
+
+    @NotBlank(message = "Lösenord får inte vara tomt")
+    @Size(min = 6, message = "Lösenordet måste vara minst 6 tecken")
     private String password;
 
     public UserRequestDto() {}

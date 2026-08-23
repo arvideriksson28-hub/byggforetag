@@ -3,6 +3,7 @@ package com.example.byggforetag.Controller;
 import com.example.byggforetag.DTO.JobRequestDto;
 import com.example.byggforetag.DTO.JobResponseDto;
 import com.example.byggforetag.Service.JobService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class JobController {
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<JobResponseDto> bookJob(@PathVariable Long userId, @RequestBody JobRequestDto jobRequestDto){
+    public ResponseEntity<JobResponseDto> bookJob(@PathVariable Long userId,@Valid @RequestBody JobRequestDto jobRequestDto){
        return ResponseEntity.status(HttpStatus.CREATED).body(jobService.createJob(userId, jobRequestDto));
     }
 

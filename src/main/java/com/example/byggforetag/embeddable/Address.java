@@ -1,11 +1,15 @@
 package com.example.byggforetag.embeddable;
 
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotBlank;
 
 @Embeddable
 public class Address {
+    @NotBlank(message = "Gata får inte vara tom")
     private String street;
+    @NotBlank(message = "Stad får inte vara tom")
     private String city;
+    @NotBlank(message = "Postnummer får inte vara tom")
     private String zipCode;
 
     public String getStreet() {

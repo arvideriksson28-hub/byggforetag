@@ -5,14 +5,23 @@ import com.example.byggforetag.Enums.JobStatus;
 import com.example.byggforetag.Model.Job;
 import com.example.byggforetag.Model.User;
 import com.example.byggforetag.embeddable.Address;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class JobRequestDto {
 
+    @Valid
+    @NotNull(message = "Adress får inte vara null")
     private Address address;
+    @NotNull(message = "scheduledDate får inte vara null")
     private LocalDate scheduledDate;
+    @NotNull(message = "Jobitem får inte vara null")
+    @NotEmpty(message = "Minst en Jobitem krävs")
     private List<JobItemDto> jobItem;
 
     public JobRequestDto() {
