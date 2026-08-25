@@ -32,13 +32,13 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto){
-        return ResponseEntity.ok(userService.updateUser(id, userRequestDto));
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto, Principal principal){
+        return ResponseEntity.ok(userService.updateUser(id, userRequestDto, principal.getName()));
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
-        userService.deleteUser(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id, Principal principal){
+        userService.userDeleteUser(id, principal.getName());
         return ResponseEntity.noContent().build();
     }
 

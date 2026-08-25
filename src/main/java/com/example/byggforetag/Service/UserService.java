@@ -94,9 +94,13 @@ public class UserService {
               .map(UserResponseDto::fromEntity)
               .toList();
     }
-    public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto){
+    public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto, String email){
        User user = userRepository.findById(id)
                .orElseThrow(() -> new UserNotFoundException(id));
+       if (!user.getEmail().equals(email)){
+           throw new  UnauthorizedException("Du har inte behörighet att uppdatera denna profil");
+       }
+
        if (userRequestDto.getEmail() != null){
            user.setEmail(userRequestDto.getEmail());
        }
@@ -104,7 +108,7 @@ public class UserService {
            user.setName(userRequestDto.getName());
        }
        if (userRequestDto.getPassword() != null){
-           user.setPassword(userRequestDto.getPassword());
+           user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
        }
        return UserResponseDto.fromEntity(userRepository.save(user));
     }
@@ -112,6 +116,17 @@ public class UserService {
     public void deleteUser(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException(id));
+
+        userRepository.delete(user);
+    }
+
+    public void userDeleteUser(Long id, String email){
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new UserNotFoundException(id));
+        if (!user.getEmail().equals(email)){
+            throw new  UnauthorizedException("Du har inte behörighet att ta bort denna profil");
+        }
+
         userRepository.delete(user);
     }
 }
