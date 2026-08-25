@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/message")
 public class MessageController {
@@ -15,9 +17,9 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @PostMapping("/{conversationId}/{userId}")
-    public ResponseEntity<MessageDto> sendMessage(@PathVariable Long conversationId, @PathVariable Long userId, @RequestBody MessageDto messageDto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.sendMessage(conversationId, userId, messageDto));
+    @PostMapping("/{conversationId}")
+    public ResponseEntity<MessageDto> sendMessage(@PathVariable Long conversationId, @RequestBody MessageDto messageDto, Principal principal){
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.sendMessage(conversationId, messageDto, principal.getName()));
     }
 
 }
