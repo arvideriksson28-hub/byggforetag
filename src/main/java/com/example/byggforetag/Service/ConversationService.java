@@ -2,6 +2,7 @@ package com.example.byggforetag.Service;
 
 import com.example.byggforetag.DTO.ConversationDto;
 import com.example.byggforetag.Exception.ConversationNotFoundException;
+import com.example.byggforetag.Exception.UnauthorizedException;
 import com.example.byggforetag.Exception.UserNotFoundException;
 import com.example.byggforetag.Model.Conversation;
 import com.example.byggforetag.Model.ConversationParticipant;
@@ -34,8 +35,11 @@ public class ConversationService {
     }
 
     @Transactional
-    public List<ConversationDto> getConversationsByUserId(Long userId){
-        return conversationRepository.findConversationByUserId(userId).stream()
+    public List<ConversationDto> getConversationsByUserEmail(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
+
+        return conversationRepository.findConversationByUserId(user.getId()).stream()
                 .map(ConversationDto::fromEntity)
                 .toList();
     }

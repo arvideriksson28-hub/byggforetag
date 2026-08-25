@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,9 +23,9 @@ public class ConversationController {
         return ResponseEntity.ok(conversationService.getConversationByJobId(jobId));
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ConversationDto>> getConversationByUserId(@PathVariable Long userId){
-        return ResponseEntity.ok(conversationService.getConversationsByUserId(userId));
+    @GetMapping("/user")
+    public ResponseEntity<List<ConversationDto>> getConversationByUserId(Principal principal){
+        return ResponseEntity.ok(conversationService.getConversationsByUserEmail(principal.getName()));
     }
 
     @PostMapping("/direct/{userId1}/{userId2}")
