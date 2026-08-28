@@ -38,6 +38,7 @@ public class JobAssignmentService {
         Job job = jobRepository.findById(jobAssignmentDto.getJobId())
                 .orElseThrow(()-> new JobNotFoundException(jobAssignmentDto.getJobId()));
 
+        //när anställd tilldelas jobb läggs den även till i konversationen för det jobbet
         User user = employee.getUser();
         Conversation conversation = conversationRepository.findConversationByJobId(job.getId())
                 .orElseThrow(()-> new JobNotFoundException(job.getId()));

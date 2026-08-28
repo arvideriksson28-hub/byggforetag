@@ -24,7 +24,7 @@ public class ConversationController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<ConversationDto>> getConversationByUserId(Principal principal){
+    public ResponseEntity<List<ConversationDto>> getConversationByUserEmail(Principal principal){
         return ResponseEntity.ok(conversationService.getConversationsByUserEmail(principal.getName()));
     }
 

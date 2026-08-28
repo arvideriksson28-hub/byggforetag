@@ -37,6 +37,8 @@ public class MessageService {
         Conversation conversation = conversationRepository.findById(conversationId)
                 .orElseThrow(()-> new ConversationNotFoundException(conversationId));
 
+        //hämtar emails från användarna i konversationen för att jämnföra mot använderen som ska skicka meddelandet email
+        //så ingen som inte är deltagare i en konversation kan skicka meddelande via t.ex postman
         List<String> conversationParticipantsId = conversation.getConversationParticipants().stream()
                 .map(cp -> cp.getUser().getEmail())
                 .toList();
