@@ -21,6 +21,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/users/me")
+    public ResponseEntity<UserResponseDto> getMyProfile(Principal principal){
+        return ResponseEntity.ok(userService.findByEmail(principal.getName()));
+    }
+
     @PostMapping("/register/user")
     public ResponseEntity<UserResponseDto> registerUser(@Valid @RequestBody UserRequestDto userRequestDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(userRequestDto));
