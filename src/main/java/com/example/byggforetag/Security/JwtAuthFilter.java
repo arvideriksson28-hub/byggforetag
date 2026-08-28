@@ -30,11 +30,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
+        //släpper igenom requests utan token.(för endpoints som alla ska nå även utloggad)
         if (authHeader == null || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
             return;
         }
 
+        // "klipper" bort "Bearer " så bara token återstår
         String token = authHeader.substring(7);
         String email = jwtService.extractUsername(token);
 
@@ -46,7 +48,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         userDetails, null, userDetails.getAuthorities()
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken); //talar om för spring att användaren är inloggad.
             }
         }
 

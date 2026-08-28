@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -20,13 +21,13 @@ public class JobController {
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<JobResponseDto> bookJob(@PathVariable Long userId,@Valid @RequestBody JobRequestDto jobRequestDto){
-       return ResponseEntity.status(HttpStatus.CREATED).body(jobService.createJob(userId, jobRequestDto));
+    public ResponseEntity<JobResponseDto> bookJob(Principal principal, @Valid @RequestBody JobRequestDto jobRequestDto){
+       return ResponseEntity.status(HttpStatus.CREATED).body(jobService.createJob(principal.getName(), jobRequestDto));
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<JobResponseDto>> seeBookedJobs(@PathVariable Long userId){
-        return ResponseEntity.ok(jobService.getJobsByUserId(userId));
+    @GetMapping("/user")
+    public ResponseEntity<List<JobResponseDto>> seeBookedJobs(Principal principal){
+        return ResponseEntity.ok(jobService.getJobsByUserId(principal.getName()));
     }
 
     @GetMapping("/{id}")

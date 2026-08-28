@@ -30,23 +30,28 @@ public class JobService {
         this.conversationParticipantRepository = conversationParticipantRepository;
     }
 
-    public JobResponseDto createJob(Long userId, JobRequestDto jobRequestDto){
-         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+    public JobResponseDto createJob(String email, JobRequestDto jobRequestDto){
+        //hämtar user med hjälp av email, från principal
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
 
-         Job job = jobRequestDto.toEntity(user);
-         jobRepository.save(job);
+        //sparar jobbet först så det har ett id som kan användas i conversation title
+        Job job = jobRequestDto.toEntity(user);
+        jobRepository.save(job);
 
-        Conversation conversation = new Conversation(job, "Jobb: " + job.getId());
+        //startar en konversation för detta jobb
+         Conversation conversation = new Conversation(job, "Jobb: " + job.getId());
         conversationRepository.save(conversation);
 
+        //lägger till user i konversationen, employye läggs till senare i samband med jobassignment.
         ConversationParticipant conversationParticipant = new ConversationParticipant(conversation, user);
         conversationParticipantRepository.save(conversationParticipant);
 
 
+
          List<JobItem> jobItems = new ArrayList<>(jobRequestDto.getJobItem().stream()
                  .map(jobItemDto -> {
-                     ServiceType serviceType = serviceTypeRepository.findById(jobItemDto.getServiceTypeId())
+                     ServiceType serviceType = serviceTypeRepository.findById(jobItemDto.getServiceTypeId()) //hämtar servicetype
                              .orElseThrow(() -> new ServiceTypeNotFoundException(jobItemDto.getServiceTypeId()));
                      return jobItemDto.toEntity(serviceType, job);
                  })
@@ -56,8 +61,11 @@ public class JobService {
          return JobResponseDto.fromEntity(jobRepository.save(job));
     }
 
-    public List<JobResponseDto> getJobsByUserId(Long userId){
-        List<Job> jobs = jobRepository.findByUserId(userId);
+    public List<JobResponseDto> getJobsByUserId(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
+
+        List<Job> jobs = jobRepository.findByUserId(user.getId());
         return jobs.stream()
                 .map(JobResponseDto::fromEntity)
                 .toList();

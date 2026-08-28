@@ -38,6 +38,7 @@ public class JobAssignmentService {
         Job job = jobRepository.findById(jobAssignmentDto.getJobId())
                 .orElseThrow(()-> new JobNotFoundException(jobAssignmentDto.getJobId()));
 
+        //när anställd tilldelas jobb läggs den även till i konversationen för det jobbet
         User user = employee.getUser();
         Conversation conversation = conversationRepository.findConversationByJobId(job.getId())
                 .orElseThrow(()-> new JobNotFoundException(job.getId()));
@@ -49,8 +50,8 @@ public class JobAssignmentService {
         return JobAssignmentDto.fromEntity(saved);
     }
 
-    public List<JobAssignmentDto> getAllJobAssignmentsByEmployeeId(Long employeeId){
-        return jobAssignmentRepository.findAllByEmployeeId(employeeId).stream()
+    public List<JobAssignmentDto> getAllJobAssignmentsByEmployeeId(String email){
+        return jobAssignmentRepository.findAllByEmployeeEmail(email).stream()
                 .map(JobAssignmentDto::fromEntity)
                 .toList();
     }

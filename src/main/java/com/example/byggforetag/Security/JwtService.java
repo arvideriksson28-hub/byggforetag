@@ -18,6 +18,7 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private long expiration;
 
+    //skapar en signerad jwt token
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .subject(userDetails.getUsername())
@@ -37,8 +38,8 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        String username = extractUsername(token); //tar ut username(email) ur token
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token); //jämnför mot userdetails username(email) och kollar så att token inte har gått ut
     }
 
     private boolean isTokenExpired(String token) {
