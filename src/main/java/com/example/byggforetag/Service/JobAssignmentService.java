@@ -49,8 +49,8 @@ public class JobAssignmentService {
         return JobAssignmentDto.fromEntity(saved);
     }
 
-    public List<JobAssignmentDto> getAllJobAssignmentsByEmployeeId(Long employeeId){
-        return jobAssignmentRepository.findAllByEmployeeId(employeeId).stream()
+    public List<JobAssignmentDto> getAllJobAssignmentsByEmployeeId(String email){
+        return jobAssignmentRepository.findAllByEmployeeEmail(email).stream()
                 .map(JobAssignmentDto::fromEntity)
                 .toList();
     }

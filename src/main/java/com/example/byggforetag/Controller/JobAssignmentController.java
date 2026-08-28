@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -18,9 +19,9 @@ public class JobAssignmentController {
         this.jobAssignmentService = jobAssignmentService;
     }
 
-    @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<List<JobAssignmentDto>> getAllJobAssignmentsByEmployeeId(@PathVariable Long employeeId){
-        return ResponseEntity.ok(jobAssignmentService.getAllJobAssignmentsByEmployeeId(employeeId));
+    @GetMapping("/employee")
+    public ResponseEntity<List<JobAssignmentDto>> getAllJobAssignmentsByEmployeeId(Principal principal){
+        return ResponseEntity.ok(jobAssignmentService.getAllJobAssignmentsByEmployeeId(principal.getName()));
     }
 
 }
