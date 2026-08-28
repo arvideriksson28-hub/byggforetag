@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
+//koppling mellan Spring och databasen för att hämta användare
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())
                 .password(user.getPassword())
-                .authorities(user.getRole().name())
-                .build();
+                .authorities(user.getRole().name()) //authorities istället för roles för att rollerna är sparade med ROLE_ i databasen
+                .build();                           //då roles() lägger till ROLE_ blir det dubbelt
     }
 }
