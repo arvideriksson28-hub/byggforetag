@@ -21,29 +21,26 @@ public class UserController {
         this.userService = userService;
     }
 
+    //Använder principal för att alltid få inloggades username och slippa checka i servicelagret.
     @GetMapping("/users/me")
     public ResponseEntity<UserResponseDto> getMyProfile(Principal principal){
         return ResponseEntity.ok(userService.findByEmail(principal.getName()));
     }
 
+    //valid så ingen felaktig data kan skickas in
     @PostMapping("/register/user")
     public ResponseEntity<UserResponseDto> registerUser(@Valid @RequestBody UserRequestDto userRequestDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(userRequestDto));
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<UserResponseDto> seeProfile(@PathVariable Long id, Principal principal){
-        return ResponseEntity.ok(userService.seeOwnProfile(principal.getName(), id));
+    @PutMapping("/update/user")
+    public ResponseEntity<UserResponseDto> updateUser(@RequestBody UserRequestDto userRequestDto, Principal principal){
+        return ResponseEntity.ok(userService.updateUser(userRequestDto, principal.getName()));
     }
 
-    @PutMapping("/users/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto, Principal principal){
-        return ResponseEntity.ok(userService.updateUser(id, userRequestDto, principal.getName()));
-    }
-
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id, Principal principal){
-        userService.userDeleteUser(id, principal.getName());
+    @DeleteMapping("/delete/user")
+    public ResponseEntity<Void> deleteUser(Principal principal){
+        userService.deleteMyAccount(principal.getName());
         return ResponseEntity.noContent().build();
     }
 

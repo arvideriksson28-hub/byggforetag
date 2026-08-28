@@ -36,10 +36,6 @@ public class UserService {
         return UserResponseDto.fromEntity(user);
     }
 
-    public boolean existsByEmail(String email){
-        return userRepository.existsByEmail(email);
-    }
-
     public List<UserResponseDto> findAllByRole(Role role){
         return userRepository.findAllByRole(role).stream()
                 .map(UserResponseDto::fromEntity)
@@ -71,17 +67,6 @@ public class UserService {
         return UserResponseDto.fromEntity(user);
     }
 
-    public UserResponseDto seeOwnProfile(String email, Long id){
-        User loggedInUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(email));
-
-        if (!loggedInUser.getId().equals(id)){
-            throw new UnauthorizedException("Du har inte behörighet att se denna profil");
-        }
-
-        return UserResponseDto.fromEntity(loggedInUser);
-    }
-
     public UserResponseDto getUserById(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
@@ -94,12 +79,9 @@ public class UserService {
               .map(UserResponseDto::fromEntity)
               .toList();
     }
-    public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto, String email){
-       User user = userRepository.findById(id)
-               .orElseThrow(() -> new UserNotFoundException(id));
-       if (!user.getEmail().equals(email)){
-           throw new  UnauthorizedException("Du har inte behörighet att uppdatera denna profil");
-       }
+    public UserResponseDto updateUser(UserRequestDto userRequestDto, String email){
+       User user = userRepository.findByEmail(email)
+               .orElseThrow(() -> new UserNotFoundException(email));
 
        if (userRequestDto.getEmail() != null){
            user.setEmail(userRequestDto.getEmail());
@@ -113,6 +95,7 @@ public class UserService {
        return UserResponseDto.fromEntity(userRepository.save(user));
     }
 
+    //delete för admin
     public void deleteUser(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException(id));
@@ -120,13 +103,10 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public void userDeleteUser(Long id, String email){
-        User user = userRepository.findById(id)
-                .orElseThrow(()-> new UserNotFoundException(id));
-        if (!user.getEmail().equals(email)){
-            throw new  UnauthorizedException("Du har inte behörighet att ta bort denna profil");
-        }
-
+    //delete för user
+    public void deleteMyAccount(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new UserNotFoundException(email));
         userRepository.delete(user);
     }
 }

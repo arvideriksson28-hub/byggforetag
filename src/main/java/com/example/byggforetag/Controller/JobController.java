@@ -21,8 +21,8 @@ public class JobController {
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<JobResponseDto> bookJob(@PathVariable Long userId,@Valid @RequestBody JobRequestDto jobRequestDto){
-       return ResponseEntity.status(HttpStatus.CREATED).body(jobService.createJob(userId, jobRequestDto));
+    public ResponseEntity<JobResponseDto> bookJob(Principal principal, @Valid @RequestBody JobRequestDto jobRequestDto){
+       return ResponseEntity.status(HttpStatus.CREATED).body(jobService.createJob(principal.getName(), jobRequestDto));
     }
 
     @GetMapping("/user")
