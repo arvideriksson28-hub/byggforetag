@@ -56,8 +56,11 @@ public class JobService {
          return JobResponseDto.fromEntity(jobRepository.save(job));
     }
 
-    public List<JobResponseDto> getJobsByUserId(Long userId){
-        List<Job> jobs = jobRepository.findByUserId(userId);
+    public List<JobResponseDto> getJobsByUserId(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
+
+        List<Job> jobs = jobRepository.findByUserId(user.getId());
         return jobs.stream()
                 .map(JobResponseDto::fromEntity)
                 .toList();
