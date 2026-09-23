@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
 
@@ -22,7 +22,7 @@ public class UserController {
     }
 
     //Använder principal för att alltid få inloggades username och slippa checka i servicelagret.
-    @GetMapping("/users/me")
+    @GetMapping("/me")
     public ResponseEntity<UserResponseDto> getMyProfile(Principal principal){
         return ResponseEntity.ok(userService.findByEmail(principal.getName()));
     }
