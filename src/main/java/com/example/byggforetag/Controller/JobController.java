@@ -20,7 +20,7 @@ public class JobController {
         this.jobService = jobService;
     }
 
-    @PostMapping("/{userId}")
+    @PostMapping("/book")
     public ResponseEntity<JobResponseDto> bookJob(Principal principal, @Valid @RequestBody JobRequestDto jobRequestDto){
        return ResponseEntity.status(HttpStatus.CREATED).body(jobService.createJob(principal.getName(), jobRequestDto));
     }
